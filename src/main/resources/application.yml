@@ -1,0 +1,42 @@
+spring:
+  application:
+    name: autoorder
+
+  datasource:
+    url: jdbc:postgresql://localhost:5433/autoorder
+    username: autoorder
+    password: autoorder
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  rabbitmq:
+    host: localhost
+    port: 5673
+    username: autoorder
+    password: autoorder
+
+  data:
+    redis:
+      host: localhost
+      port: 6380
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,prometheus,info
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
+logging:
+  pattern:
+    console: "%d{HH:mm:ss} [%thread] [trace_id=%X{traceId}] %-5level %logger{36} - %msg%n"
