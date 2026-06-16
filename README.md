@@ -81,7 +81,9 @@ O código é dividido em 4 módulos independentes que se comunicam exclusivament
 | Schemas do banco e migrations | ✅ Concluído |
 | Ingestion API idempotente | ✅ Concluído |
 | Publicação de eventos no RabbitMQ | ✅ Concluído |
-| Integração com LLM | ⏳ Pendente |
+| Translation Context com LLM | ✅ Concluído |
+| Catalog Context | ✅ Concluído |
+| Order Context | ⏳ Pendente |
 | Dashboard do faturista | ⏳ Pendente |
 | Observabilidade e DLQs | ⏳ Pendente |
 
