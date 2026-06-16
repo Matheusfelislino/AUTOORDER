@@ -78,8 +78,9 @@ O código é dividido em 4 módulos independentes que se comunicam exclusivament
 | Etapa | Status |
 |---|---|
 | Setup do projeto e infra local | ✅ Concluído |
-| Schemas do banco e migrations | 🔄 Em andamento |
-| Ingestion API idempotente | ⏳ Pendente |
+| Schemas do banco e migrations | ✅ Concluído |
+| Ingestion API idempotente | ✅ Concluído |
+| Publicação de eventos no RabbitMQ | ✅ Concluído |
 | Integração com LLM | ⏳ Pendente |
 | Dashboard do faturista | ⏳ Pendente |
 | Observabilidade e DLQs | ⏳ Pendente |
