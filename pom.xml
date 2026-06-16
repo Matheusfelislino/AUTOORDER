@@ -96,6 +96,23 @@
 			<optional>true</optional>
 		</dependency>
 
+		<!-- Flyway: migrations versionadas do banco de dados-->
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-database-postgresql</artifactId>
+		</dependency>
+
+		<!-- Testcontainers integrado ao Spring Boot (necessário para @ServiceConnection) -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-testcontainers</artifactId>
+			<scope>test</scope>
+		</dependency>
+
 		<!-- Testes -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
