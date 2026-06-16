@@ -43,7 +43,7 @@ public class RawMessage {
     @Column(name = "processed_at")
     private Instant processedAt;
 
-    // Flyway criou a tabela — o Hibernate apenas valida. 
+    // Flyway criou a tabela — o Hibernate apenas valida.
     // A criação do objeto passa obrigatoriamente por este factory method,
     // garantindo que nenhuma instância incompleta seja persistida.
     public static RawMessage create(

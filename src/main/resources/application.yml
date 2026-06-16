@@ -45,3 +45,10 @@ management:
 logging:
   pattern:
     console: "%d{HH:mm:ss} [%thread] [trace_id=%X{traceId}] %-5level %logger{36} - %msg%n"
+
+groq:
+  api-url: https://api.groq.com/openai/v1/chat/completions
+  api-key: ${GROQ_API_KEY}
+  model: llama-3.3-70b-versatile
+  connect-timeout-seconds: 5
+  read-timeout-seconds: 30
