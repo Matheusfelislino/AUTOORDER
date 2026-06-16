@@ -18,11 +18,11 @@
 
 ## O Problema
 
-Distribuidoras e atacadistas B2B recebem pedidos em formatos caóticos — áudios no WhatsApp, mensagens com abreviações, fotos de listas manuscritas. Um faturista gasta até **20 minutos** para decifrar e digitar manualmente um único pedido no ERP, gerando erros, horas extras e um teto duro de escalabilidade.
+Distribuidoras e atacadistas B2B recebem pedidos em formatos caóticos áudios no WhatsApp, mensagens com abreviações, fotos de listas manuscritas. Um faturista gasta até **20 minutos** para decifrar e digitar manualmente um único pedido no ERP, gerando erros, horas extras e um teto duro de escalabilidade.
 
 ## A Proposta
 
-O AutoOrder é um middleware inteligente que absorve mensagens desestruturadas, traduz a intenção do cliente via LLM e entrega um pedido validado e pronto para aprovação em menos de **30 segundos** — sem forçar o cliente a mudar seu comportamento.
+O AutoOrder é um middleware inteligente que absorve mensagens desestruturadas, traduz a intenção do cliente via LLM e entrega um pedido validado e pronto para aprovação em menos de **30 segundos** sem forçar o cliente a mudar seu comportamento.
 
 ---
 
@@ -30,7 +30,7 @@ O AutoOrder é um middleware inteligente que absorve mensagens desestruturadas, 
 
 ### Monólito Modular Event-Driven
 
-Optamos por um Monólito Modular em vez de microsserviços. Microsserviços resolvem problemas de escala organizacional (times de 50+ pessoas) e introduzem complexidade operacional que não se justifica aqui. O Monólito Modular oferece o mesmo isolamento de domínios com zero fricção de deploy — complexidade onde ela importa (no domínio), não na infraestrutura.
+Optamos por um Monólito Modular em vez de microsserviços. Microsserviços resolvem problemas de escala organizacional (times de 50+ pessoas) e introduzem complexidade operacional que não se justifica aqui. O Monólito Modular oferece o mesmo isolamento de domínios com zero fricção de deploy complexidade onde ela importa (no domínio), não na infraestrutura.
 
 ### Java 21 com Virtual Threads
 
