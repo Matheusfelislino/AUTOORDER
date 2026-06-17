@@ -85,7 +85,7 @@ O código é dividido em 4 módulos independentes que se comunicam exclusivament
 | Catalog Context | ✅ Concluído |
 | Order Context | ✅ Concluído |
 | API REST do Dashboard | ✅ Concluído |
-| Dashboard do faturista (Frontend) | ⏳ Pendente |
+| Dashboard do faturista (Frontend) | ✅ Concluído |
 | Observabilidade e DLQs | ⏳ Pendente |
 
 ---
