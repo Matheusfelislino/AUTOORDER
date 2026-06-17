@@ -19,16 +19,13 @@ public class Product {
     @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
 
-    // SkuConverter aplicado automaticamente via autoApply = true
     @Column(name = "sku", nullable = false, unique = true, length = 50)
     private Sku sku;
 
     @Column(name = "name", nullable = false, length = 255)
     private String name;
 
-    // MoneyConverter aplicado automaticamente via autoApply = true
-    @Column(name = "base_price", nullable = false,
-            precision = 10, scale = 2)
+    @Column(name = "base_price", nullable = false, precision = 10, scale = 2)
     private Money basePrice;
 
     @Column(name = "stock", nullable = false)

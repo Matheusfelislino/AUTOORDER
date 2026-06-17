@@ -91,4 +91,40 @@ public class RabbitMQConfig {
         template.setMessageConverter(jsonMessageConverter());
         return template;
     }
+    // Filas do Order Context
+    public static final String ORDER_QUEUE = "order.create.queue";
+    public static final String ORDER_DLQ = "order.create.dlq";
+    public static final String ROUTING_KEY_ORDER_TRANSLATED = "translation.order.translated";
+
+    @Bean
+    public Queue orderQueue() {
+        return QueueBuilder
+                .durable(ORDER_QUEUE)
+                .withArgument("x-dead-letter-exchange", DLX_EXCHANGE)
+                .withArgument("x-dead-letter-routing-key", ORDER_DLQ)
+                .build();
+    }
+
+    @Bean
+    public Queue orderDlq() {
+        return QueueBuilder
+                .durable(ORDER_DLQ)
+                .build();
+    }
+
+    @Bean
+    public Binding orderBinding() {
+        return BindingBuilder
+                .bind(orderQueue())
+                .to(eventsExchange())
+                .with(ROUTING_KEY_ORDER_TRANSLATED);
+    }
+
+    @Bean
+    public Binding orderDlqBinding() {
+        return BindingBuilder
+                .bind(orderDlq())
+                .to(dlxExchange())
+                .with(ORDER_DLQ);
+    }
 }

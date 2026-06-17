@@ -83,7 +83,7 @@ O código é dividido em 4 módulos independentes que se comunicam exclusivament
 | Publicação de eventos no RabbitMQ | ✅ Concluído |
 | Translation Context com LLM | ✅ Concluído |
 | Catalog Context | ✅ Concluído |
-| Order Context | ⏳ Pendente |
+| Order Context | ✅ Concluído |
 | Dashboard do faturista | ⏳ Pendente |
 | Observabilidade e DLQs | ⏳ Pendente |
 
