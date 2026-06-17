@@ -84,7 +84,8 @@ O código é dividido em 4 módulos independentes que se comunicam exclusivament
 | Translation Context com LLM | ✅ Concluído |
 | Catalog Context | ✅ Concluído |
 | Order Context | ✅ Concluído |
-| Dashboard do faturista | ⏳ Pendente |
+| API REST do Dashboard | ✅ Concluído |
+| Dashboard do faturista (Frontend) | ⏳ Pendente |
 | Observabilidade e DLQs | ⏳ Pendente |
 
 ---

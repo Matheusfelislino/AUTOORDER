@@ -35,6 +35,12 @@ public class Order {
     @Column(name = "approved_at")
     private Instant approvedAt;
 
+    // Optimistic Locking — impede que dois faturistas corrompam o mesmo pedido.
+    // O Hibernate inclui WHERE id = ? AND version = ? em todo UPDATE automaticamente.
+    @Version
+    @Column(name = "version", nullable = false)
+    private Long version;
+
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "order_id", nullable = false)
     private List<OrderItem> items;
