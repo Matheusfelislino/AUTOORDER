@@ -2,6 +2,8 @@ package com.autoorder.order.application;
 
 import com.autoorder.catalog.api.CatalogQueryService;
 import com.autoorder.catalog.api.ProductView;
+import com.autoorder.ingestion.infrastructure.RawMessageRepository;
+import com.autoorder.order.api.OrderDetailResponse;
 import com.autoorder.order.domain.Money;
 import com.autoorder.order.domain.Order;
 import com.autoorder.order.domain.OrderItem;
@@ -29,12 +31,12 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
     private final CatalogQueryService catalogQueryService;
+    private final RawMessageRepository rawMessageRepository;
 
     @Transactional
     public void createFromEvent(OrderTranslatedEvent event) {
         if (orderRepository.existsByMessageId(event.messageId())) {
-            log.warn("Duplicate OrderTranslatedEvent ignored. messageId={}",
-                    event.messageId());
+            log.warn("Duplicate OrderTranslatedEvent ignored. messageId={}", event.messageId());
             return;
         }
 
@@ -49,7 +51,6 @@ public class OrderService {
                 catalogQueryService.resolveAliases(rawDescriptions);
 
         List<OrderItem> orderItems = buildOrderItems(event.items(), resolvedProducts);
-
         Order order = Order.create(event.messageId(), event.customerId(), orderItems);
 
         try {
@@ -57,18 +58,25 @@ public class OrderService {
             log.info("Order persisted. messageId={} orderId={} status={} confirmedTotal={}",
                     event.messageId(), order.getId(), order.getStatus(),
                     order.getConfirmedTotal());
-
         } catch (DataIntegrityViolationException e) {
             log.warn("Race condition detected on order creation. messageId={} — discarding duplicate.",
                     event.messageId());
         }
     }
 
+    // Busca o content original no schema_ingestion e monta o DTO completo
+    @Transactional(readOnly = true)
+    public OrderDetailResponse buildDetailResponse(Order order) {
+        String rawContent = rawMessageRepository.findByMessageId(order.getMessageId())
+                .map(raw -> raw.getPayload())
+                .orElse(null);
+        return OrderDetailResponse.from(order, rawContent);
+    }
+
     @Transactional
     public Order approve(UUID orderId) {
         Order order = orderRepository.findByIdWithItems(orderId)
-                .orElseThrow(() -> new EntityNotFoundException(
-                        "Order not found: " + orderId));
+                .orElseThrow(() -> new EntityNotFoundException("Order not found: " + orderId));
         order.approve();
         return orderRepository.save(order);
     }
@@ -76,8 +84,7 @@ public class OrderService {
     @Transactional
     public Order reject(UUID orderId) {
         Order order = orderRepository.findByIdWithItems(orderId)
-                .orElseThrow(() -> new EntityNotFoundException(
-                        "Order not found: " + orderId));
+                .orElseThrow(() -> new EntityNotFoundException("Order not found: " + orderId));
         order.reject();
         return orderRepository.save(order);
     }
@@ -87,10 +94,8 @@ public class OrderService {
             Map<String, ProductView> resolvedProducts
     ) {
         List<OrderItem> orderItems = new ArrayList<>();
-
         for (TranslatedOrderItem translatedItem : translatedItems) {
             ProductView product = resolvedProducts.get(translatedItem.rawDescription());
-
             if (product != null) {
                 orderItems.add(OrderItem.resolved(
                         translatedItem.rawDescription(),
@@ -107,7 +112,6 @@ public class OrderService {
                 ));
             }
         }
-
         return orderItems;
     }
 }

@@ -35,21 +35,18 @@ public class OrderController {
     @GetMapping("/{id}")
     public ResponseEntity<OrderDetailResponse> getOrder(@PathVariable UUID id) {
         return orderRepository.findByIdWithItems(id)
-                .map(OrderDetailResponse::from)
+                .map(order -> orderService.buildDetailResponse(order))
                 .map(ResponseEntity::ok)
-                .orElseThrow(() -> new EntityNotFoundException(
-                        "Order not found: " + id));
+                .orElseThrow(() -> new EntityNotFoundException("Order not found: " + id));
     }
 
     @PostMapping("/{id}/approve")
     public ResponseEntity<OrderDetailResponse> approveOrder(@PathVariable UUID id) {
-        return ResponseEntity.ok(OrderDetailResponse.from(
-                orderService.approve(id)));
+        return ResponseEntity.ok(orderService.buildDetailResponse(orderService.approve(id)));
     }
 
     @PostMapping("/{id}/reject")
     public ResponseEntity<OrderDetailResponse> rejectOrder(@PathVariable UUID id) {
-        return ResponseEntity.ok(OrderDetailResponse.from(
-                orderService.reject(id)));
+        return ResponseEntity.ok(orderService.buildDetailResponse(orderService.reject(id)));
     }
 }

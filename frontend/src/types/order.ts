@@ -29,6 +29,7 @@ export interface OrderDetail {
   createdAt: string
   approvedAt: string | null
   version: number
+  rawContent: string | null
   items: OrderItem[]
 }
 

@@ -17,9 +17,10 @@ public record OrderDetailResponse(
         Instant createdAt,
         Instant approvedAt,
         Long version,
+        String rawContent,
         List<OrderItemResponse> items
 ) {
-    public static OrderDetailResponse from(Order order) {
+    public static OrderDetailResponse from(Order order, String rawContent) {
         return new OrderDetailResponse(
                 order.getId(),
                 order.getMessageId(),
@@ -30,6 +31,7 @@ public record OrderDetailResponse(
                 order.getCreatedAt(),
                 order.getApprovedAt(),
                 order.getVersion(),
+                rawContent,
                 order.getItems().stream()
                         .map(OrderItemResponse::from)
                         .toList()

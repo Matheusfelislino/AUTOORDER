@@ -1,15 +1,17 @@
 import { useState } from 'react'
-import { OrderList } from './components/OrderList'
-import { OrderDetailPanel } from './components/OrderDetail'
+import { isAxiosError } from 'axios'
+import { useQueryClient } from '@tanstack/react-query'
+import { Sidebar } from './components/layout/Sidebar'
+import { DetailPanel } from './components/layout/DetailPanel'
 import { useApproveOrder, useOrderDetail, useOrders, useRejectOrder } from './hooks/useOrders'
 import type { OrderStatus } from './types/order'
-import { isAxiosError } from 'axios'
 
 function Toast({ message, onClose }: { message: string; onClose: () => void }) {
   return (
-    <div className="fixed top-4 right-4 z-50 bg-orange-100 border border-orange-300 text-orange-800 px-4 py-3 rounded-lg shadow-lg flex items-center gap-3 text-sm max-w-sm">
-      <span>{message}</span>
-      <button onClick={onClose} className="text-orange-600 hover:text-orange-900 font-bold">✕</button>
+    <div className="fixed top-4 right-4 z-50 bg-white border border-amber-200 shadow-lg text-amber-800 px-4 py-3 rounded-lg flex items-center gap-3 text-sm max-w-sm">
+      <span>⚠️</span>
+      <span className="flex-1">{message}</span>
+      <button onClick={onClose} className="text-amber-400 hover:text-amber-700">✕</button>
     </div>
   )
 }
@@ -18,6 +20,7 @@ export default function App() {
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [filter, setFilter] = useState<OrderStatus | undefined>(undefined)
   const [toast, setToast] = useState<string | null>(null)
+  const queryClient = useQueryClient()
 
   const { data: ordersPage, isLoading } = useOrders(filter)
   const { data: orderDetail, isLoading: isLoadingDetail } = useOrderDetail(selectedId)
@@ -27,64 +30,68 @@ export default function App() {
     setTimeout(() => setToast(null), 6000)
   }
 
-  const handleError = (error: unknown, queryClient: ReturnType<typeof import('@tanstack/react-query').useQueryClient>) => {
-    if (isAxiosError(error) && error.response?.status === 409) {
-      showToast('⚠️ Este pedido foi alterado por outro usuário. Os dados foram atualizados.')
-      queryClient.invalidateQueries({ queryKey: ['order', selectedId] })
-      queryClient.invalidateQueries({ queryKey: ['orders'] })
-    } else {
-      showToast('Ocorreu um erro. Tente novamente.')
-    }
+  const handleConflict = () => {
+    showToast('Este pedido foi alterado por outro usuário. Os dados foram atualizados.')
+    queryClient.invalidateQueries({ queryKey: ['order', selectedId] })
+    queryClient.invalidateQueries({ queryKey: ['orders'] })
   }
 
   const approve = useApproveOrder()
   const reject = useRejectOrder()
 
+  const handleApprove = () => {
+    if (!orderDetail) return
+    approve.mutate(orderDetail.id, {
+      onSuccess: () => {
+        const orders = ordersPage?.content ?? []
+        const idx = orders.findIndex(o => o.id === orderDetail.id)
+        const next = orders[idx + 1] ?? orders[idx - 1]
+        if (next) setSelectedId(next.id)
+      },
+      onError: (e) => {
+        if (isAxiosError(e) && e.response?.status === 409) handleConflict()
+        else showToast('Erro ao aprovar. Tente novamente.')
+      }
+    })
+  }
+
+  const handleReject = () => {
+    if (!orderDetail) return
+    reject.mutate(orderDetail.id, {
+      onSuccess: () => {
+        const orders = ordersPage?.content ?? []
+        const idx = orders.findIndex(o => o.id === orderDetail.id)
+        const next = orders[idx + 1] ?? orders[idx - 1]
+        if (next) setSelectedId(next.id)
+      },
+      onError: (e) => {
+        if (isAxiosError(e) && e.response?.status === 409) handleConflict()
+        else showToast('Erro ao rejeitar. Tente novamente.')
+      }
+    })
+  }
+
   return (
-    <div className="flex h-screen bg-gray-50 font-sans">
+    <div className="flex h-screen overflow-hidden bg-white font-sans">
       {toast && <Toast message={toast} onClose={() => setToast(null)} />}
 
-      <aside className="w-80 bg-white border-r border-gray-200 flex flex-col shrink-0">
-        {isLoading ? (
-          <div className="flex items-center justify-center h-full text-gray-400 text-sm">
-            Carregando pedidos...
-          </div>
-        ) : (
-          <OrderList
-            orders={ordersPage?.content ?? []}
-            selectedId={selectedId}
-            onSelect={setSelectedId}
-            activeFilter={filter}
-            onFilterChange={setFilter}
-          />
-        )}
-      </aside>
+      <Sidebar
+        orders={ordersPage?.content ?? []}
+        selectedId={selectedId}
+        onSelect={setSelectedId}
+        activeFilter={filter}
+        onFilterChange={setFilter}
+        isLoading={isLoading}
+      />
 
-      <main className="flex-1 bg-white border-l border-gray-100">
-        {!selectedId && (
-          <div className="flex items-center justify-center h-full text-gray-400 text-sm">
-            Selecione um pedido para visualizar os detalhes
-          </div>
-        )}
-        {selectedId && isLoadingDetail && (
-          <div className="flex items-center justify-center h-full text-gray-400 text-sm">
-            Carregando detalhes...
-          </div>
-        )}
-        {selectedId && orderDetail && (
-          <OrderDetailPanel
-            order={orderDetail}
-            onApprove={() => approve.mutate(orderDetail.id, {
-              onError: (e) => handleError(e, approve.reset as never)
-            })}
-            onReject={() => reject.mutate(orderDetail.id, {
-              onError: (e) => handleError(e, reject.reset as never)
-            })}
-            isApproving={approve.isPending}
-            isRejecting={reject.isPending}
-          />
-        )}
-      </main>
+      <DetailPanel
+        order={orderDetail}
+        isLoading={!!selectedId && isLoadingDetail}
+        onApprove={handleApprove}
+        onReject={handleReject}
+        isApproving={approve.isPending}
+        isRejecting={reject.isPending}
+      />
     </div>
   )
 }
