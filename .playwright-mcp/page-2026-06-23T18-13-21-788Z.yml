@@ -1,0 +1,50 @@
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - generic [ref=e5]:
+      - generic [ref=e6]:
+        - img [ref=e8]
+        - generic [ref=e11]:
+          - generic [ref=e12]: AutoOrder
+          - generic [ref=e13]: AI Operations
+      - button "Recolher [" [ref=e14]:
+        - img [ref=e15]
+    - generic [ref=e19]:
+      - img [ref=e20]
+      - textbox "⌘K" [ref=e23]:
+        - /placeholder: Buscar cliente, SKU, mensagem…
+      - generic [ref=e24]: ⌘K
+    - generic [ref=e26]:
+      - button "Tudo 0" [ref=e27]:
+        - text: Tudo
+        - generic [ref=e28]: "0"
+      - button "Revisão 0" [ref=e29]:
+        - text: Revisão
+        - generic [ref=e30]: "0"
+      - button "Prontos 0" [ref=e31]:
+        - text: Prontos
+        - generic [ref=e32]: "0"
+      - button [ref=e33]:
+        - img [ref=e34]
+    - navigation [ref=e36]:
+      - list [ref=e37]:
+        - listitem [ref=e38]
+        - listitem [ref=e46]
+        - listitem [ref=e54]
+        - listitem [ref=e62]
+        - listitem [ref=e70]
+        - listitem [ref=e78]
+    - generic [ref=e86]:
+      - generic [ref=e87]: FA
+      - generic [ref=e88]:
+        - paragraph [ref=e89]: Faturista
+        - paragraph [ref=e90]: Distribuidora · AutoOrder
+      - button [ref=e91]:
+        - img [ref=e92]
+  - main [ref=e95]:
+    - generic [ref=e97]: Nenhum pedido selecionado
+    - generic [ref=e99]:
+      - img [ref=e101]
+      - heading "Inbox zero." [level=3] [ref=e104]
+      - paragraph [ref=e105]:
+        - text: Selecione um pedido para revisar.
+        - text: Use ↑ ↓ para navegar.

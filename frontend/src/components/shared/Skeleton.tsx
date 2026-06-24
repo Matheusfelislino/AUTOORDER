@@ -1,32 +1,44 @@
+import { Sparkles } from 'lucide-react'
+
 export function OrderCardSkeleton() {
   return (
-    <div className="px-4 py-3 border-b border-gray-100 animate-pulse">
-      <div className="flex justify-between items-center mb-2">
-        <div className="h-3 bg-gray-200 rounded w-32" />
-        <div className="h-4 bg-gray-200 rounded w-16" />
+    <div className="p-2.5 rounded-md">
+      <div className="flex items-center gap-2 mb-2">
+        <div className="size-1.5 shimmer rounded-full" />
+        <div className="h-3 shimmer rounded w-32 flex-1" />
+        <div className="h-2.5 shimmer rounded w-12" />
       </div>
-      <div className="h-3 bg-gray-200 rounded w-24 mb-1" />
-      <div className="h-3 bg-gray-200 rounded w-20" />
+      <div className="h-2.5 shimmer rounded w-40 mb-2 ml-3.5" />
+      <div className="h-4 shimmer rounded w-16 ml-3.5" />
     </div>
   )
 }
 
-export function OrderDetailSkeleton() {
+export function ProcessingState() {
   return (
-    <div className="flex flex-col h-full animate-pulse p-6 gap-6">
-      <div className="flex justify-between">
+    <div className="flex-1 flex flex-col items-center justify-center gap-4 py-16 px-8">
+      <div className="size-10 rounded-xl bg-muted grid place-items-center">
+        <Sparkles className="size-4 text-muted-foreground animate-pulse" />
+      </div>
+      <div className="text-center space-y-3 w-full max-w-xs">
+        <p className="text-[13px] font-medium text-foreground/70">
+          ✨ Extraindo produtos e intenção de compra...
+        </p>
         <div className="space-y-2">
-          <div className="h-5 bg-gray-200 rounded w-48" />
-          <div className="h-3 bg-gray-200 rounded w-32" />
+          <div className="h-9 shimmer rounded-lg w-full" />
+          <div className="h-9 shimmer rounded-lg w-full" />
+          <div className="h-9 shimmer rounded-lg w-3/4" />
         </div>
-        <div className="h-6 bg-gray-200 rounded w-20" />
       </div>
-      <div className="h-20 bg-gray-100 rounded-lg" />
-      <div className="space-y-3">
-        <div className="h-4 bg-gray-200 rounded w-24" />
-        <div className="h-14 bg-gray-100 rounded-lg" />
-        <div className="h-14 bg-gray-100 rounded-lg" />
-      </div>
+    </div>
+  )
+}
+
+export function ContextBarSkeleton() {
+  return (
+    <div className="flex items-center gap-3 px-5 h-14">
+      <div className="h-4 shimmer rounded w-36" />
+      <div className="h-4 shimmer rounded w-24" />
     </div>
   )
 }

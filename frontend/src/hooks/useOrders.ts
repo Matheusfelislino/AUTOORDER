@@ -6,6 +6,7 @@ export function useOrders(status?: OrderStatus) {
   return useQuery({
     queryKey: ['orders', status],
     queryFn: () => fetchOrders(status),
+    refetchInterval: 10_000, // Polling a cada 10s — novos pedidos aparecem automaticamente
   })
 }
 
